@@ -1,0 +1,6 @@
+@echo off
+set PATH=%PATH%;C:\Windows\System32;C:\Windows;C:\Windows\System32\WindowsPowerShell\v1.0\
+echo Memperbarui tampilan desain (CSS)...
+call npm run tailwind:build
+echo Memulai Aplikasi e-Rapor...
+npm start

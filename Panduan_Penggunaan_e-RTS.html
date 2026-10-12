@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panduan Penggunaan e-RTS v1.0.0</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm 18mm 20mm 18mm;
+    }
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      line-height: 1.6;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 30px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .header-box {
+      border-bottom: 3px solid #2563eb;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: 24pt;
+      color: #1e3a8a;
+      margin: 0 0 6px 0;
+      font-weight: 800;
+    }
+    .meta-badge {
+      display: inline-block;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 9pt;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .developer {
+      color: #64748b;
+      font-size: 10pt;
+      margin-top: 4px;
+    }
+    h2 {
+      font-size: 14pt;
+      color: #0f172a;
+      border-left: 4px solid #2563eb;
+      padding-left: 10px;
+      margin-top: 26px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+    h3 {
+      font-size: 11pt;
+      color: #334155;
+      margin-top: 14px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+    p, li {
+      font-size: 10.5pt;
+      color: #334155;
+    }
+    ul, ol {
+      margin-top: 6px;
+      margin-bottom: 14px;
+      padding-left: 24px;
+    }
+    li {
+      margin-bottom: 5px;
+    }
+    .highlight-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 14px 0;
+    }
+    .toc-box {
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 14px 20px;
+      margin-bottom: 26px;
+    }
+    .toc-box ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    .toc-box a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .footer-note {
+      margin-top: 36px;
+      border-top: 1px dashed #cbd5e1;
+      padding-top: 14px;
+      text-align: center;
+      font-size: 9.5pt;
+      color: #64748b;
+      font-style: italic;
+    }
+    @media print {
+      body {
+        padding: 0;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .print-btn:hover {
+      background: #1d4ed8;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn no-print" onclick="window.print()">🖨️ Cetak / Simpan ke PDF</button>
+
+  <div class="container">
+    <div class="header-box">
+      <span class="meta-badge">BUKU PANDUAN RESMI</span>
+      <h1>e-RTS (e-Rapor Tengah Semester)</h1>
+      <div class="developer">
+        <strong>Versi:</strong> 1.0.0 &nbsp;|&nbsp; <strong>Pengembang:</strong> SIGIE Lab by Nur Wahid Mustofa
+      </div>
+    </div>
+
+    <div class="toc-box no-print">
+      <strong>Daftar Isi Singkat:</strong>
+      <ul>
+        <li>1. Pendahuluan</li>
+        <li>2. Instalasi Aplikasi</li>
+        <li>3. Pengaturan Awal Sekolah</li>
+        <li>4. Mengelola Data Siswa</li>
+        <li>5. Mengelola Mata Pelajaran</li>
+        <li>6. Input Nilai & Kehadiran</li>
+        <li>7. Mencetak Rapor (Satuan & Masal)</li>
+      </ul>
+    </div>
+
+    <h2>1. Pendahuluan</h2>
+    <p>
+      <strong>e-RTS (e-Rapor Tengah Semester)</strong> adalah aplikasi desktop luring (<em>offline</em>) yang dirancang khusus untuk mempermudah Wali Kelas dan Guru Mata Pelajaran dalam mengolah nilai serta mencetak rapor tengah semester secara cepat, rapi, dan terstruktur.
+    </p>
+    <div class="highlight-card">
+      <strong>Keunggulan Utama:</strong> 100% Offline (tanpa internet), data tersimpan aman di laptop/komputer, mendukung import Excel, dan format cetak langsung pas di kertas A4.
+    </div>
+
+    <h2>2. Instalasi Aplikasi</h2>
+    <ol>
+      <li>Siapkan file installer: <code>Installer e-RTS 1.0.0 by SIGIE Lab.exe</code>.</li>
+      <li>Klik dua kali (<em>double click</em>) pada file installer tersebut.</li>
+      <li>Ikuti petunjuk pemasangan hingga selesai (opsional: tentukan folder tujuan instalasi).</li>
+      <li>Setelah selesai, pintasan (<em>shortcut</em>) aplikasi akan otomatis muncul di Desktop atau Start Menu komputer.</li>
+    </ol>
+
+    <h2>3. Pengaturan Awal Sekolah</h2>
+    <p>Sebelum memasukkan data nilai, sangat dianjurkan mengisi data pengaturan terlebih dahulu:</p>
+    <ol>
+      <li>Buka menu <strong>Pengaturan</strong> (ikon gerigi) pada panel menu di sebelah kiri.</li>
+      <li>Lengkapi formulir yang tersedia:
+        <ul>
+          <li><strong>Identitas Sekolah:</strong> Nama Sekolah, Tahun Ajaran, dan Semester.</li>
+          <li><strong>Identitas Kelas:</strong> Nama Wali Kelas, NUPTK/NIP Wali Kelas, Nama Kepala Sekolah, NUPTK/NIP Kepala Sekolah, dan Nama Rombel/Kelas.</li>
+          <li><strong>Logo & Tanda Tangan:</strong> Anda dapat mengunggah (upload) gambar Logo Sekolah, Stempel/Tanda Tangan Wali Kelas, dan Kepala Sekolah. <em>(Jika tidak diupload, kolom tanda tangan akan otomatis dikosongkan untuk tanda tangan basah secara manual).</em></li>
+          <li><strong>Tempat & Tanggal Cetak:</strong> Contoh: <em>Jakarta, 12 Oktober 2026</em>.</li>
+        </ul>
+      </li>
+      <li>Klik tombol <strong>Simpan Pengaturan</strong> di kanan atas halaman.</li>
+    </ol>
+
+    <h2>4. Mengelola Data Siswa</h2>
+    <p>Anda dapat memasukkan data siswa dengan dua metode:</p>
+    <h3>A. Menggunakan Import Excel (Direkomendasikan)</h3>
+    <ol>
+      <li>Buka menu <strong>Siswa</strong> di sidebar kiri.</li>
+      <li>Klik tombol <strong>Import Data Excel</strong>.</li>
+      <li>Pilih file Excel yang berisi daftar siswa. Sistem akan otomatis mendeteksi kolom NISN, Nama, dan Jenis Kelamin. Anda juga dapat memfilter siswa berdasarkan Rombel/Kelas jika dalam satu file Excel terdapat banyak kelas.</li>
+    </ol>
+    <h3>B. Menambah Secara Manual</h3>
+    <ol>
+      <li>Klik tombol <strong>Tambah Siswa</strong>.</li>
+      <li>Ketikkan NISN, Nama Lengkap, dan pilih Jenis Kelamin (L/P), lalu simpan.</li>
+      <li>Tersedia juga fitur edit dan hapus langsung di tabel daftar siswa.</li>
+    </ol>
+
+    <h2>5. Mengelola Mata Pelajaran</h2>
+    <ol>
+      <li>Buka menu <strong>Mata Pelajaran</strong>.</li>
+      <li>Klik tombol <strong>Tambah Mapel</strong>.</li>
+      <li>Masukkan nama mata pelajaran (misal: <em>Pendidikan Pancasila</em>, <em>Matematika</em>) serta pilih kategorinya (<strong>Wajib</strong> atau <strong>Pilihan</strong>).</li>
+      <li>Kategori ini menentukan pengelompokan tabel mata pelajaran pada lembar cetak rapor.</li>
+    </ol>
+
+    <h2>6. Input Nilai & Kehadiran</h2>
+    <h3>A. Pengisian Nilai Mata Pelajaran</h3>
+    <ol>
+      <li>Masuk ke menu <strong>Penilaian</strong>.</li>
+      <li>Pilih mata pelajaran yang ingin diinput nilainya melalui menu pilihan di bagian atas.</li>
+      <li><strong>Metode Cepat (Template Excel):</strong>
+        <ul>
+          <li>Klik <strong>Download Template Excel</strong>. Aplikasi akan mengunduh file Excel yang telah terisi nomor urut, NISN, dan nama seluruh siswa di kelas Anda.</li>
+          <li>Buka file Excel tersebut, isi kolom <strong>Nilai Asli</strong> dan <strong>Nilai Remidi</strong> (jika ada).</li>
+          <li>Kembali ke aplikasi e-RTS dan klik <strong>Import Nilai dari Excel</strong>.</li>
+        </ul>
+      </li>
+      <li><strong>Metode Manual:</strong> Anda juga bisa langsung mengetikkan angka nilai pada tabel di layar, lalu klik <strong>Simpan Nilai</strong>.</li>
+    </ol>
+
+    <h3>B. Pengisian Data Kehadiran & Catatan</h3>
+    <ol>
+      <li>Buka menu <strong>Kehadiran</strong>.</li>
+      <li>Isi rekap ketidakhadiran siswa: <strong>Sakit (S)</strong>, <strong>Izin (I)</strong>, dan <strong>Tanpa Keterangan (A)</strong>.</li>
+      <li>Isi kolom <strong>Catatan Wali Kelas</strong> untuk evaluasi/motivasi perkembangan siswa serta kolom <strong>Tanggapan Orang Tua</strong> (jika diperlukan).</li>
+      <li>Klik tombol <strong>Simpan Absensi</strong> di sudut kanan atas.</li>
+    </ol>
+
+    <h2>7. Mencetak Rapor</h2>
+    <ol>
+      <li>Buka menu <strong>Cetak Rapor</strong>.</li>
+      <li>Tabel akan menampilkan daftar seluruh siswa beserta kelengkapan nilainya.</li>
+      <li><strong>Cetak Per Siswa (Satuan):</strong>
+        <ul>
+          <li>Klik tombol <strong>Preview</strong> (ikon mata) di baris siswa yang bersangkutan.</li>
+          <li>Periksa tampilan lembar rapor yang telah disesuaikan dengan standar kertas A4.</li>
+          <li>Klik tombol <strong>Cetak (Print)</strong> di pojok kanan atas untuk langsung mencetak ke printer atau menyimpan sebagai PDF.</li>
+        </ul>
+      </li>
+      <li><strong>Cetak Masal Seluruh Kelas (Batch Print):</strong>
+        <ul>
+          <li>Dari halaman daftar siswa, klik tombol biru <strong>Cetak Semua Siswa</strong>.</li>
+          <li>Aplikasi akan menggabungkan seluruh lembar rapor siswa dalam satu antrean cetak dengan pemisah halaman otomatis (<em>page break</em>) per siswa.</li>
+        </ul>
+      </li>
+    </ol>
+
+    <div class="footer-note">
+      Dokumen ini disusun untuk memudahkan operasional e-RTS.<br>
+      © 2026 SIGIE Lab by Nur Wahid Mustofa. Seluruh hak cipta dilindungi.
+    </div>
+  </div>
+
+</body>
+</html>
+

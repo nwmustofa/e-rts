@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Production / Build output
+dist/
+build/
+
+# Local databases & uploads/temp
+*.sqlite
+*.sqlite3
+*.log
+
+# Environment & OS files
+.DS_Store
+Thumbs.db
+

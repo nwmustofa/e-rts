@@ -1,0 +1,48 @@
+{
+  "name": "e-rts",
+  "productName": "e-RTS",
+  "version": "1.0.0",
+  "description": "e-Rapor Tengah Semester Desktop App",
+  "main": "main.js",
+  "scripts": {
+    "start": "concurrently \"npm run tailwind:watch\" \"electron .\"",
+    "tailwind:watch": "tailwindcss -i ./src/css/input.css -o ./src/css/output.css --watch",
+    "tailwind:build": "tailwindcss -i ./src/css/input.css -o ./src/css/output.css --minify",
+    "build": "npm run tailwind:build && electron-builder"
+  },
+  "build": {
+    "npmRebuild": false,
+    "appId": "com.sigielab.erts",
+    "productName": "e-RTS",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "Installer e-RTS 1.0.0 by SIGIE Lab.exe"
+    }
+  },
+  "keywords": [
+    "e-rapor",
+    "kurikulum-merdeka"
+  ],
+  "author": "SIGIE Lab by Nur Wahid Mustofa",
+  "license": "ISC",
+  "dependencies": {
+    "lucide": "^0.344.0",
+    "sqlite3": "^5.1.7",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^29.1.0",
+    "electron-builder": "^24.13.3",
+    "tailwindcss": "^3.4.1"
+  }
+}
+
