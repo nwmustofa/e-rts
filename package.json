@@ -1,7 +1,7 @@
 {
   "name": "e-rts",
   "productName": "e-RTS",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "e-Rapor Tengah Semester Desktop App",
   "main": "main.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "artifactName": "Installer e-RTS 1.0.0 by SIGIE Lab.exe"
+      "artifactName": "Installer e-RTS 1.1.0 by SIGIE Lab.exe"
     }
   },
   "keywords": [

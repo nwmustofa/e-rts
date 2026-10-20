@@ -1,12 +1,12 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const path = require('path');
+const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
-const { dialog, shell } = require('electron');
 const xlsx = require('xlsx');
 
 // Initialize SQLite database
 const dbPath = path.join(app.getPath('userData'), 'database.sqlite');
-const db = new sqlite3.Database(dbPath, (err) => {
+let db = new sqlite3.Database(dbPath, (err) => {
   if (err) console.error('Database opening error: ', err);
   else console.log('Database connected at', dbPath);
 });
@@ -32,6 +32,7 @@ function setupDatabase() {
     db.run(`ALTER TABLE school_info ADD COLUMN homeroom_sign_path TEXT`, (err) => {});
     db.run(`ALTER TABLE school_info ADD COLUMN headmaster_id_type TEXT`, (err) => {});
     db.run(`ALTER TABLE school_info ADD COLUMN homeroom_id_type TEXT`, (err) => {});
+    db.run(`ALTER TABLE school_info ADD COLUMN show_rank INTEGER DEFAULT 1`, (err) => {});
 
     db.run(`CREATE TABLE IF NOT EXISTS students (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -119,13 +120,15 @@ ipcMain.handle('save-school-info', async (event, data) => {
           school_name=?, headmaster_name=?, headmaster_nuptk=?, 
           academic_year=?, semester=?, homeroom_name=?, 
           homeroom_nuptk=?, class_name=?, print_place=?, 
-          print_date=?, logo_path=?, headmaster_sign_path=?, homeroom_sign_path=?, headmaster_id_type=?, homeroom_id_type=? WHERE id=?`, 
+          print_date=?, logo_path=?, headmaster_sign_path=?, homeroom_sign_path=?, headmaster_id_type=?, homeroom_id_type=?, show_rank=? WHERE id=?`, 
           [
             data.schoolName, data.headmasterName, data.headmasterNuptk, 
             data.academicYear, data.semester, data.homeroomName, 
             data.homeroomNuptk, data.className, data.printPlace, 
             data.printDate, data.logoPath || '', data.headmasterSignPath || '', data.homeroomSignPath || '',
-            data.headmasterIdType || 'NUPTK', data.homeroomIdType || 'NUPTK', row.id
+            data.headmasterIdType || 'NUPTK', data.homeroomIdType || 'NUPTK',
+            data.showRank !== undefined ? (Number(data.showRank) ? 1 : 0) : 1,
+            row.id
           ], 
           function(updateErr) {
             if (updateErr) reject(updateErr);
@@ -135,14 +138,15 @@ ipcMain.handle('save-school-info', async (event, data) => {
         db.run(`INSERT INTO school_info (
           school_name, headmaster_name, headmaster_nuptk, 
           academic_year, semester, homeroom_name, 
-          homeroom_nuptk, class_name, print_place, print_date, logo_path, headmaster_sign_path, homeroom_sign_path, headmaster_id_type, homeroom_id_type
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+          homeroom_nuptk, class_name, print_place, print_date, logo_path, headmaster_sign_path, homeroom_sign_path, headmaster_id_type, homeroom_id_type, show_rank
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
           [
             data.schoolName, data.headmasterName, data.headmasterNuptk, 
             data.academicYear, data.semester, data.homeroomName, 
             data.homeroomNuptk, data.className, data.printPlace, 
             data.printDate, data.logoPath || '', data.headmasterSignPath || '', data.homeroomSignPath || '',
-            data.headmasterIdType || 'NUPTK', data.homeroomIdType || 'NUPTK'
+            data.headmasterIdType || 'NUPTK', data.homeroomIdType || 'NUPTK',
+            data.showRank !== undefined ? (Number(data.showRank) ? 1 : 0) : 1
           ], 
           function(insertErr) {
             if (insertErr) reject(insertErr);
@@ -208,11 +212,12 @@ ipcMain.handle('update-student', async (event, data) => {
 });
 
 ipcMain.handle('scan-excel-classes', async () => {
-  const { filePaths } = await dialog.showOpenDialog({
+  const { filePaths } = await dialog.showOpenDialog(mainWindow, {
     title: 'Pilih File Excel Data Siswa',
     properties: ['openFile'],
     filters: [{ name: 'Excel Files', extensions: ['xlsx', 'xls', 'csv'] }]
   });
+  if (mainWindow) { mainWindow.focus(); mainWindow.webContents.focus(); }
 
   if (filePaths && filePaths.length > 0) {
     try {
@@ -397,20 +402,21 @@ ipcMain.handle('export-excel', async (event, { subjectName, className, scores })
   const safeSubjectName = subjectName ? subjectName.replace(/[^a-zA-Z0-9 _-]/g, '') : 'Mapel';
   const safeClassName = className ? className.replace(/[^a-zA-Z0-9 _-]/g, '') : 'Kelas';
   
-  const { filePath } = await dialog.showSaveDialog({
+  const { filePath } = await dialog.showSaveDialog(mainWindow, {
     title: 'Simpan Template Excel',
     defaultPath: `Template_Nilai_${safeSubjectName}_${safeClassName}.xlsx`,
     filters: [{ name: 'Excel Files', extensions: ['xlsx'] }]
   });
+  if (mainWindow) { mainWindow.focus(); mainWindow.webContents.focus(); }
 
   if (filePath) {
-    // Format data for Excel
+    // Format data for Excel (support score 0)
     const data = scores.map((s, i) => ({
       'No': i + 1,
       'NISN': s.nisn,
       'Nama Siswa': s.name,
-      'Nilai Asli': s.original_score || '',
-      'Nilai Remidi': s.remedial_score || ''
+      'Nilai Asli': (s.original_score !== null && s.original_score !== undefined) ? s.original_score : '',
+      'Nilai Remidi': (s.remedial_score !== null && s.remedial_score !== undefined) ? s.remedial_score : ''
     }));
 
     const ws = xlsx.utils.json_to_sheet(data);
@@ -423,11 +429,12 @@ ipcMain.handle('export-excel', async (event, { subjectName, className, scores })
 });
 
 ipcMain.handle('pick-image', async () => {
-  const { filePaths } = await dialog.showOpenDialog({
+  const { filePaths } = await dialog.showOpenDialog(mainWindow, {
     title: 'Pilih Gambar',
     properties: ['openFile'],
     filters: [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png'] }]
   });
+  if (mainWindow) { mainWindow.focus(); mainWindow.webContents.focus(); }
   if (filePaths && filePaths.length > 0) {
     return filePaths[0]; // Return the local file path
   }
@@ -435,24 +442,29 @@ ipcMain.handle('pick-image', async () => {
 });
 
 ipcMain.handle('import-excel', async () => {
-  const { filePaths } = await dialog.showOpenDialog({
+  const { filePaths } = await dialog.showOpenDialog(mainWindow, {
     title: 'Pilih File Excel',
     properties: ['openFile'],
     filters: [{ name: 'Excel Files', extensions: ['xlsx', 'xls'] }]
   });
+  if (mainWindow) { mainWindow.focus(); mainWindow.webContents.focus(); }
 
   if (filePaths && filePaths.length > 0) {
     const wb = xlsx.readFile(filePaths[0]);
     const ws = wb.Sheets[wb.SheetNames[0]];
     const data = xlsx.utils.sheet_to_json(ws);
     
-    // Map Excel columns to our format
-    return data.map(row => ({
-      nisn: String(row['NISN'] || ''),
-      name: row['Nama Siswa'] || '',
-      original_score: row['Nilai Asli'] || null,
-      remedial_score: row['Nilai Remidi'] || null
-    }));
+    // Map Excel columns to our format (properly preserve score 0)
+    return data.map(row => {
+      const origVal = row['Nilai Asli'];
+      const remVal = row['Nilai Remidi'];
+      return {
+        nisn: String(row['NISN'] || ''),
+        name: row['Nama Siswa'] || '',
+        original_score: (origVal !== undefined && origVal !== null && String(origVal).trim() !== '') ? Number(origVal) : null,
+        remedial_score: (remVal !== undefined && remVal !== null && String(remVal).trim() !== '') ? Number(remVal) : null
+      };
+    });
   }
   return null;
 });
@@ -539,7 +551,8 @@ ipcMain.handle('get-dashboard-stats', async () => {
       totalScoresExpected: 0,
       totalScoresEntered: 0,
       totalRemedialEntered: 0,
-      subjectsNeedsInput: []
+      subjectsNeedsInput: [],
+      subjectsComplete: []
     };
 
     db.serialize(() => {
@@ -565,10 +578,13 @@ ipcMain.handle('get-dashboard-stats', async () => {
           rows.forEach(subject => {
             db.get('SELECT COUNT(*) as entered, SUM(CASE WHEN remedial_score IS NOT NULL THEN 1 ELSE 0 END) as remedial FROM scores WHERE subject_id = ? AND original_score IS NOT NULL', [subject.id], (err2, r2) => {
               if (!err2 && r2) {
-                stats.totalScoresEntered += r2.entered || 0;
+                const entered = r2.entered || 0;
+                stats.totalScoresEntered += entered;
                 stats.totalRemedialEntered += r2.remedial || 0;
                 
-                if ((r2.entered || 0) < stats.totalStudents) {
+                if (stats.totalStudents > 0 && entered >= stats.totalStudents) {
+                  stats.subjectsComplete.push(subject.name);
+                } else {
                   stats.subjectsNeedsInput.push(subject.name);
                 }
               }
@@ -589,4 +605,180 @@ ipcMain.handle('get-dashboard-stats', async () => {
 
 ipcMain.handle('open-link', (event, url) => {
   shell.openExternal(url);
+});
+
+// --- BACKUP & RESTORE DATABASE ---
+ipcMain.handle('backup-database', async () => {
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const { filePath } = await dialog.showSaveDialog(mainWindow, {
+    title: 'Simpan Cadangan Database e-RTS',
+    defaultPath: `Backup_eRTS_${dateStr}.sqlite`,
+    filters: [{ name: 'e-RTS Backup (*.sqlite)', extensions: ['sqlite', 'db'] }]
+  });
+  if (mainWindow) { mainWindow.focus(); mainWindow.webContents.focus(); }
+
+  if (filePath) {
+    try {
+      fs.copyFileSync(dbPath, filePath);
+      return { success: true, filePath };
+    } catch (e) {
+      return { success: false, error: e.message };
+    }
+  }
+  return { success: false, canceled: true };
+});
+
+ipcMain.handle('restore-database', async () => {
+  const { filePaths } = await dialog.showOpenDialog(mainWindow, {
+    title: 'Pilih File Cadangan Database e-RTS',
+    properties: ['openFile'],
+    filters: [{ name: 'e-RTS Backup (*.sqlite)', extensions: ['sqlite', 'db'] }]
+  });
+  if (mainWindow) { mainWindow.focus(); mainWindow.webContents.focus(); }
+
+  if (filePaths && filePaths.length > 0) {
+    const backupFile = filePaths[0];
+    try {
+      // Tutup koneksi database aktif
+      await new Promise((resolve, reject) => {
+        db.close((err) => {
+          if (err) reject(err);
+          else resolve();
+        });
+      });
+
+      // Timpa file database dengan cadangan
+      fs.copyFileSync(backupFile, dbPath);
+
+      // Buka kembali koneksi database
+      db = new sqlite3.Database(dbPath, (err) => {
+        if (err) console.error('Database opening error after restore:', err);
+        else console.log('Database re-connected after restore');
+      });
+      setupDatabase();
+
+      return { success: true };
+    } catch (e) {
+      // Jika gagal, pastikan koneksi tetap terbuka
+      db = new sqlite3.Database(dbPath, () => {});
+      return { success: false, error: e.message };
+    }
+  }
+  return { success: false, canceled: true };
+});
+
+// --- LEGER NILAI & RANKING ---
+ipcMain.handle('get-leger-data', async () => {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM students ORDER BY name ASC', (err, students) => {
+      if (err) return reject(err);
+      db.all('SELECT * FROM subjects ORDER BY category DESC, name ASC', (err2, subjects) => {
+        if (err2) return reject(err2);
+        db.all('SELECT * FROM scores', (err3, allScores) => {
+          if (err3) return reject(err3);
+
+          const scoreMap = new Map();
+          for (const s of (allScores || [])) {
+            scoreMap.set(`${s.student_id}_${s.subject_id}`, s);
+          }
+
+          const studentRows = (students || []).map(student => {
+            let total = 0;
+            let scoredCount = 0;
+            const subjectScores = {};
+
+            for (const subj of (subjects || [])) {
+              const sc = scoreMap.get(`${student.id}_${subj.id}`);
+              let finalScore = null;
+              let origScore = null;
+              let remScore = null;
+
+              if (sc) {
+                if (sc.original_score !== null && sc.original_score !== undefined) {
+                  origScore = sc.original_score;
+                }
+                if (sc.remedial_score !== null && sc.remedial_score !== undefined) {
+                  remScore = sc.remedial_score;
+                }
+                // Nilai akhir: gunakan remidi jika ada, jika tidak gunakan nilai asli
+                if (remScore !== null) {
+                  finalScore = remScore;
+                } else if (origScore !== null) {
+                  finalScore = origScore;
+                }
+              }
+
+              if (finalScore !== null) {
+                total += finalScore;
+                scoredCount++;
+              }
+
+              subjectScores[subj.id] = {
+                original: origScore,
+                remedial: remScore,
+                final: finalScore
+              };
+            }
+
+            const totalSubj = (subjects || []).length;
+            const average = totalSubj > 0 ? (total / totalSubj) : 0;
+
+            return {
+              student,
+              subjectScores,
+              totalScore: Number(total.toFixed(2)),
+              averageScore: Number(average.toFixed(2)),
+              scoredCount
+            };
+          });
+
+          // Peringkat berdasarkan totalScore tertinggi
+          const sorted = [...studentRows].sort((a, b) => b.totalScore - a.totalScore);
+          let currentRank = 1;
+          for (let i = 0; i < sorted.length; i++) {
+            if (i > 0 && sorted[i].totalScore < sorted[i - 1].totalScore) {
+              currentRank = i + 1;
+            }
+            sorted[i].rank = currentRank;
+          }
+
+          // Lookup map untuk akses cepat ranking per student_id
+          const rankMap = {};
+          for (const item of sorted) {
+            rankMap[item.student.id] = {
+              rank: item.rank,
+              totalScore: item.totalScore,
+              averageScore: item.averageScore
+            };
+          }
+
+          resolve({
+            students: studentRows,
+            subjects: subjects || [],
+            totalStudents: (students || []).length,
+            rankMap
+          });
+        });
+      });
+    });
+  });
+});
+
+ipcMain.handle('export-leger-excel', async (event, { className, data }) => {
+  const safeClassName = className ? className.replace(/[^a-zA-Z0-9 _-]/g, '') : 'Kelas';
+  const { filePath } = await dialog.showSaveDialog(mainWindow, {
+    title: 'Simpan Leger Nilai Excel',
+    defaultPath: `Leger_Nilai_${safeClassName}.xlsx`,
+    filters: [{ name: 'Excel Files', extensions: ['xlsx'] }]
+  });
+  if (mainWindow) { mainWindow.focus(); mainWindow.webContents.focus(); }
+
+  if (filePath) {
+    const ws = xlsx.utils.json_to_sheet(data);
+    const wb = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(wb, ws, "Leger Nilai");
+    xlsx.writeFile(wb, filePath);
+    return true;
+  }
+  return false;
 });

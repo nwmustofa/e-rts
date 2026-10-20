@@ -24,6 +24,10 @@ contextBridge.exposeInMainWorld('api', {
   getAttendanceByStudent: (studentId) => ipcRenderer.invoke('get-attendance-by-student', studentId),
   getDashboardStats: () => ipcRenderer.invoke('get-dashboard-stats'),
   pickImage: () => ipcRenderer.invoke('pick-image'),
-  openLink: (url) => ipcRenderer.invoke('open-link', url)
+  openLink: (url) => ipcRenderer.invoke('open-link', url),
+  backupDatabase: () => ipcRenderer.invoke('backup-database'),
+  restoreDatabase: () => ipcRenderer.invoke('restore-database'),
+  getLegerData: () => ipcRenderer.invoke('get-leger-data'),
+  exportLegerExcel: (data) => ipcRenderer.invoke('export-leger-excel', data)
 });
 

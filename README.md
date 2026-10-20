@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-1.0.0-blue.svg" alt="Version">
+  <img src="https://img.shields.io/badge/Version-1.1.0-blue.svg" alt="Version">
   <img src="https://img.shields.io/badge/Platform-Windows-0078D6.svg?logo=windows&logoColor=white" alt="Platform">
   <img src="https://img.shields.io/badge/Electron-29.x-47848F.svg?logo=electron&logoColor=white" alt="Electron">
   <img src="https://img.shields.io/badge/TailwindCSS-3.4-38B2AC.svg?logo=tailwind-css&logoColor=white" alt="Tailwind CSS">
@@ -30,19 +30,28 @@ Aplikasi ini mengutamakan kecepatan kerja, kemudahan migrasi data dari file Exce
 ## ✨ Fitur Unggulan
 
 - 🔒 **100% Offline & Mandiri:** Tidak membutuhkan koneksi internet atau server eksternal. Data tersimpan aman di database lokal SQLite.
-- 📊 **Import Cepat dari Excel:**
-  - Import data siswa sekaligus dengan deteksi otomatis kolom (NISN, Nama, Rombel/Kelas, Jenis Kelamin).
-  - Download template Excel penilaian dan import kembali nilai siswa secara instan.
+- 🛡️ **Setup Guard & Alur Terarah:** Mewajibkan kelengkapan Data Sekolah dan Pengaturan Cetak sebelum membuka menu operasional, dan langsung mengarahkan ke Dashboard setelah selesai disimpan.
+- 📋 **Leger Nilai & Ranking Kelas (Baru di v1.1.0):**
+  - Matriks rekap nilai siswa dari semua mata pelajaran dalam satu tabel.
+  - Perhitungan otomatis Total Nilai, Rata-Rata, dan Peringkat Kelas (🥇, 🥈, 🥉).
+  - Ekspor leger nilai kelas lengkap ke format Excel (.xlsx).
 - 🖨️ **Tata Letak Cetak A4 Standar:**
-  - Format cetak rapor yang rapi dan presisi di kertas A4.
+  - Format cetak rapor rapi dan presisi di kertas A4.
+  - Dilengkapi Jumlah Nilai, Rata-Rata, dan Peringkat Siswa di lembar cetak rapor.
   - Dilengkapi Kop Sekolah, Logo Sekolah, serta kolom Tanda Tangan & Stempel (Wali Kelas dan Kepala Sekolah).
 - ⚡ **Batch Printing (Cetak Masal):**
   - Cetak rapor seluruh siswa dalam satu kelas hanya dengan sekali klik (*auto page-break*).
-- 📈 **Dashboard Interaktif:**
-  - Statistik pemantauan kelengkapan input nilai per mata pelajaran dan rekap kehadiran siswa.
-- ⚙️ **Pengaturan Fleksibel:**
-  - Mendukung input NUPTK maupun NIP untuk Kepala Sekolah dan Wali Kelas.
-  - Pengaturan tempat dan tanggal pencetakan rapor yang dinamis.
+- 📊 **Import Cepat dari Excel:**
+  - Import data siswa sekaligus dengan deteksi otomatis kolom (NISN, Nama, Rombel/Kelas, Jenis Kelamin).
+  - Download template Excel penilaian dan import kembali nilai siswa secara instan.
+- 🔄 **Tombol "Tidak Remedi":**
+  - Sekali klik untuk menyamakan Nilai Remidi dengan Nilai Asli bagi siswa yang tidak mengikuti remidi.
+- 🎯 **Dukungan Penuh Nilai 0 (Nol):**
+  - Mengakui angka `0` sebagai nilai yang valid pada input tabel, impor Excel, database, dan cetak rapor.
+- 💾 **Fitur Backup & Restore:**
+  - Cadangkan seluruh data database ke lokasi pilihan pengguna dan pulihkan data kapan saja dengan aman.
+- 🔔 **Notifikasi In-App Modern:**
+  - Sistem *toast notification* dan *dialog modal* di dalam aplikasi yang ringan dan bebas kendala keyboard freeze.
 
 ---
 
@@ -50,7 +59,7 @@ Aplikasi ini mengutamakan kecepatan kerja, kemudahan migrasi data dari file Exce
 
 - **Runtime:** [Electron](https://www.electronjs.org/)
 - **Frontend:** HTML5, [Tailwind CSS](https://tailwindcss.com/), Vanilla JavaScript, [Lucide Icons](https://lucide.dev/)
-- **Database:** [SQLite3](https://www.sqlite.org/) (Embedded Native Database)
+- **Database:** [SQLite3](https://www.sqlite.org/) (Embedded Native Database N-API)
 - **Spreadsheet Engine:** [SheetJS (xlsx)](https://sheetjs.com/)
 - **Packaging:** [electron-builder](https://www.electron.build/) (NSIS Windows Installer)
 
@@ -91,7 +100,7 @@ npm run build
 ```
 
 Hasil installer NSIS akan tersimpan di dalam folder `dist/` dengan nama:
-`Installer e-RTS 1.0.0 by SIGIE Lab.exe`
+`Installer e-RTS 1.1.0 by SIGIE Lab.exe`
 
 ---
 
@@ -117,4 +126,3 @@ Jika aplikasi ini bermanfaat dan membantu pekerjaan Anda di sekolah, Anda dapat 
 ## 📄 Lisensi
 
 Didistribusikan di bawah lisensi ISC. Silakan gunakan dan kembangkan untuk kebutuhan pendidikan.
-

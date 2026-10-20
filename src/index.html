@@ -34,6 +34,9 @@
       <a href="#" id="nav-attendance" class="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-slate-800 text-slate-300 hover:text-white transition-colors">
         <i data-lucide="calendar-check" class="w-5 h-5"></i> Kehadiran
       </a>
+      <a href="#" id="nav-leger" class="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-slate-800 text-slate-300 hover:text-white transition-colors">
+        <i data-lucide="table-properties" class="w-5 h-5"></i> Leger Nilai
+      </a>
       <a href="#" id="nav-print" class="flex items-center gap-3 px-3 py-2.5 rounded-md hover:bg-slate-800 text-slate-300 hover:text-white transition-colors">
         <i data-lucide="printer" class="w-5 h-5"></i> Cetak Rapor
       </a>
@@ -65,6 +68,12 @@
       </div>
     </div>
   </main>
+  
+  <!-- Global In-App Toast Notification Container -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Global In-App Modal Container -->
+  <div id="modal-container" class="relative z-50"></div>
 
   <script src="./js/curriculum-data.js"></script>
   <script src="./js/renderer.js"></script>
