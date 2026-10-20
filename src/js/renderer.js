@@ -157,7 +157,7 @@
 
       document.getElementById('btn-action-trakteer').addEventListener('click', () => {
         if (window.api && window.api.openLink) {
-          window.api.openLink('https://trakteer.id/nur_wahid_musthofa/gift');
+          window.api.openLink('https://teer.id/nur_wahid_musthofa');
         }
         closeTrakteer();
       });
@@ -698,7 +698,7 @@
 
       document.getElementById('btn-trakteer-tab').addEventListener('click', () => {
         if (window.api && window.api.openLink) {
-          window.api.openLink('https://trakteer.id/nur_wahid_musthofa/gift');
+          window.api.openLink('https://teer.id/nur_wahid_musthofa');
         }
       });
 

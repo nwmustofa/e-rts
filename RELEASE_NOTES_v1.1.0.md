@@ -64,5 +64,5 @@ Versi 1.1.0 hadir dengan fokus utama pada **peningkatan kestabilan aplikasi (men
 ---
 
 *Terima kasih atas dukungan seluruh Bapak/Ibu Guru dan Wali Kelas. Dukung terus karya lokal melalui:*  
-👉 **[Traktir Kopi / Cendol di Trakteer](https://trakteer.id/nur_wahid_musthofa/gift)**
+👉 **[Traktir Kopi / Cendol di Trakteer](https://teer.id/nur_wahid_musthofa)**
 

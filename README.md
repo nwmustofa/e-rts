@@ -119,7 +119,7 @@ Dikembangkan dengan penuh dedikasi oleh:
 
 ### ☕ Dukung Pengembangan
 Jika aplikasi ini bermanfaat dan membantu pekerjaan Anda di sekolah, Anda dapat mendukung pengembangan dan update fitur selanjutnya melalui:
-👉 **[Traktir Kopi / Cendol di Trakteer](https://trakteer.id/nur_wahid_musthofa/gift)**
+👉 **[Traktir Kopi / Cendol di Trakteer](https://teer.id/nur_wahid_musthofa)**
 
 ---
 
