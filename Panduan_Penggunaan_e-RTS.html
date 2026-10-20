@@ -7,7 +7,7 @@
   <style>
     @page {
       size: A4;
-      margin: 20mm 18mm 20mm 18mm;
+      margin: 18mm 16mm 18mm 16mm;
     }
     body {
       font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
@@ -18,7 +18,7 @@
       padding: 30px;
     }
     .container {
-      max-width: 800px;
+      max-width: 820px;
       margin: 0 auto;
     }
     .header-box {
@@ -49,7 +49,7 @@
       margin-top: 4px;
     }
     h2 {
-      font-size: 14pt;
+      font-size: 13.5pt;
       color: #0f172a;
       border-left: 4px solid #2563eb;
       padding-left: 10px;
@@ -65,7 +65,7 @@
       page-break-after: avoid;
     }
     p, li {
-      font-size: 10.5pt;
+      font-size: 10pt;
       color: #334155;
     }
     ul, ol {
@@ -82,6 +82,10 @@
       border-radius: 8px;
       padding: 12px 16px;
       margin: 14px 0;
+      font-size: 10pt;
+    }
+    .highlight-card strong {
+      color: #1e3a8a;
     }
     .toc-box {
       background: #f1f5f9;
@@ -92,12 +96,44 @@
     .toc-box ul {
       margin: 0;
       padding-left: 20px;
+      columns: 2;
+      -webkit-columns: 2;
+      -moz-columns: 2;
     }
-    .toc-box a {
-      color: #2563eb;
-      text-decoration: none;
-      font-weight: 500;
+    .toc-box li {
+      font-size: 9.5pt;
+      margin-bottom: 4px;
     }
+    .changelog-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 14px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .changelog-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .badge-tag {
+      display: inline-block;
+      font-size: 8.5pt;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-right: 6px;
+      text-transform: uppercase;
+    }
+    .badge-feat { background: #dcfce7; color: #15803d; }
+    .badge-fix  { background: #fee2e2; color: #b91c1c; }
+    .badge-ui   { background: #e0e7ff; color: #4338ca; }
+    .badge-print{ background: #fef3c7; color: #b45309; }
     .footer-note {
       margin-top: 36px;
       border-top: 1px dashed #cbd5e1;
@@ -114,6 +150,9 @@
       .no-print {
         display: none !important;
       }
+      .changelog-card {
+        page-break-inside: avoid;
+      }
     }
     .print-btn {
       position: fixed;
@@ -127,9 +166,25 @@
       font-weight: 600;
       cursor: pointer;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      z-index: 999;
     }
     .print-btn:hover {
       background: #1d4ed8;
+    }
+    table.spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 16px 0;
+      font-size: 9.5pt;
+    }
+    table.spec-table th, table.spec-table td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 10px;
+      text-align: left;
+    }
+    table.spec-table th {
+      background: #f1f5f9;
+      font-weight: 700;
     }
   </style>
 </head>
@@ -139,7 +194,7 @@
 
   <div class="container">
     <div class="header-box">
-      <span class="meta-badge">BUKU PANDUAN RESMI</span>
+      <span class="meta-badge">BUKU PANDUAN PENGGUNA RESMI</span>
       <h1>e-RTS (e-Rapor Tengah Semester)</h1>
       <div class="developer">
         <strong>Versi:</strong> 1.1.0 &nbsp;|&nbsp; <strong>Pengembang:</strong> SIGIE Lab by Nur Wahid Mustofa
@@ -147,7 +202,7 @@
     </div>
 
     <div class="toc-box no-print">
-      <strong>Daftar Isi Singkat:</strong>
+      <strong style="display:block; margin-bottom:8px;">Daftar Isi Panduan:</strong>
       <ul>
         <li>1. Pendahuluan</li>
         <li>2. Instalasi & Update Aplikasi</li>
@@ -159,99 +214,267 @@
         <li>8. Leger Nilai & Ranking Kelas</li>
         <li>9. Mencetak Rapor (Satuan & Masal)</li>
         <li>10. Cadangkan & Pulihkan Data (Backup & Restore)</li>
+        <li>11. Catatan Riwayat Perubahan (Changelog)</li>
+        <li>12. Bantuan & Dukungan Developer</li>
       </ul>
     </div>
 
     <h2>1. Pendahuluan</h2>
     <p>
-      <strong>e-RTS (e-Rapor Tengah Semester)</strong> adalah aplikasi desktop luring (<em>offline</em>) yang dirancang khusus untuk mempermudah Wali Kelas dan Guru Mata Pelajaran dalam mengolah nilai, menyusun leger ranking kelas, serta mencetak rapor tengah semester secara cepat, rapi, dan terstruktur.
+      <strong>e-RTS (e-Rapor Tengah Semester)</strong> adalah aplikasi desktop luring (<em>offline-first</em>) yang dirancang khusus untuk mempermudah Wali Kelas dan Guru Mata Pelajaran dalam mengolah nilai, menyusun leger nilai lengkap dengan ranking kelas, serta mencetak lembar rapor Penilaian / Sumatif Tengah Semester (PTS/STS) secara cepat, rapi, dan terstruktur.
     </p>
     <div class="highlight-card">
-      <strong>Fitur Baru di v1.1.0:</strong> Sistem anti-freeze (in-app toast notification), dukungan penuh nilai 0, tombol "Tidak Remedi", Leger Nilai lengkap dengan ranking dan ekspor Excel, total nilai dan ranking di format cetak rapor, serta fitur Backup & Restore database.
+      <strong>Ikhtisar Pembaruan Versi 1.1.0:</strong>
+      Aplikasi v1.1.0 menghadirkan arsitektur <em>anti-freeze</em> berbasis floating toast dan modal in-app, pengakuan penuh angka 0 sebagai nilai sah, tombol satu klik "Tidak Remedi", modul Leger Nilai lengkap dengan pemeringkatan kelas otomatis (🥇, 🥈, 🥉) & ekspor Excel, format cetak rapor presisi 1 halaman penuh A4 standar arsip/jilid map (skala 100% bebas downscale), serta fitur cadangkan dan pulihkan database lokal (Backup & Restore).
     </div>
 
     <h2>2. Instalasi & Update Aplikasi</h2>
     <ol>
-      <li>Siapkan file installer: <code>Installer e-RTS 1.1.0 by SIGIE Lab.exe</code>.</li>
+      <li>Siapkan file installer resmi: <code>Installer e-RTS 1.1.0 by SIGIE Lab.exe</code>.</li>
       <li>Klik dua kali (<em>double click</em>) pada file installer tersebut.</li>
-      <li>Ikuti petunjuk pemasangan hingga selesai. Jika Anda sudah pernah menginstal versi 1.0.0, installer v1.1.0 akan otomatis memperbarui aplikasi Anda tanpa menghapus data nilai yang sudah ada.</li>
-      <li>Buka aplikasi melalui pintasan (<em>shortcut</em>) di Desktop atau Start Menu.</li>
+      <li>Pilih direktori instalasi yang diinginkan atau biarkan pada pengaturan bawaan, lalu klik <strong>Pasang / Install</strong>.</li>
+      <li>Jika Anda sebelumnya telah menginstal versi 1.0.0, installer v1.1.0 akan <strong>otomatis memperbarui aplikasi</strong> tanpa menghapus atau mengubah database data siswa dan nilai yang telah Anda input.</li>
+      <li>Buka aplikasi melalui pintasan (<em>shortcut</em>) di Desktop atau Start Menu komputer Anda.</li>
     </ol>
 
     <h2>3. Pengaturan Awal Sekolah (Setup Guard)</h2>
-    <p>Pada versi 1.1.0, aplikasi menerapkan <strong>Setup Guard</strong>. Seluruh menu operasional di sidebar terkunci hingga data pengaturan awal dilengkapi:</p>
+    <p>
+      Untuk menjamin integritas data dan mencegah cetak rapor tanpa identitas resmi, aplikasi menerapkan <strong>Setup Guard</strong>. Seluruh menu operasional di sidebar kiri terkunci dengan indikator abu-abu hingga pengaturan awal dilengkapi:
+    </p>
     <ol>
       <li>Buka menu <strong>Pengaturan</strong> (ikon gerigi) pada panel menu di sebelah kiri.</li>
-      <li>Lengkapi tab <strong>1. Data Sekolah</strong>: Nama Sekolah, Nama Kepala Sekolah, ID/NUPTK/NIP Kepala Sekolah, Tahun Ajaran, dan Semester.</li>
-      <li>Lengkapi tab <strong>2. Pengaturan Cetak</strong>: Nama Wali Kelas, ID/NUPTK/NIP Wali Kelas, Kelas/Rombel, Tempat Cetak, dan Tanggal Cetak Rapor. (Unggah logo dan tanda tangan bersifat opsional).</li>
-      <li>Klik tombol <strong>Simpan Pengaturan</strong>. Aplikasi akan menampilkan notifikasi sukses dan <strong>otomatis langsung membuka menu Dashboard</strong> dengan seluruh menu yang telah terbuka.</li>
+      <li>Lengkapi isian pada tab <strong>1. Data Sekolah</strong>: Nama Sekolah, Nama Kepala Sekolah, Jenis Identitas (NIP/NUPTK/PegID), Nomor ID Kepala Sekolah, Tahun Ajaran, dan Semester.</li>
+      <li>Lengkapi isian pada tab <strong>2. Pengaturan Cetak</strong>: Nama Wali Kelas, Jenis Identitas, Nomor ID Wali Kelas, Kelas/Rombel, Tempat Cetak, dan Tanggal Cetak Rapor.</li>
+      <li><strong>Logo & Tanda Tangan (Opsional tapi Direkomendasikan):</strong> Unggah logo sekolah, tanda tangan digital wali kelas, serta stempel/tanda tangan kepala sekolah berformat JPG/PNG untuk otomatis tersemat di lembar cetak rapor.</li>
+      <li><strong>Opsi Peringkat Kelas:</strong> Anda dapat mengaktifkan atau menonaktifkan centang <em>"Tampilkan Peringkat Kelas di Lembar Rapor Siswa"</em> sesuai kebijakan sekolah.</li>
+      <li>Klik tombol <strong>Simpan Pengaturan</strong>. Aplikasi akan menampilkan notifikasi sukses dan <strong>otomatis langsung membuka menu Dashboard</strong> dengan seluruh menu operasional yang telah terbuka penuh.</li>
     </ol>
 
     <h2>4. Mengelola Data Siswa</h2>
-    <p>Anda dapat memasukkan data siswa dengan dua metode:</p>
+    <p>Anda dapat memasukkan data siswa dengan dua metode praktis:</p>
     <h3>A. Menggunakan Import Excel Dapodik (Direkomendasikan)</h3>
     <ol>
       <li>Buka menu <strong>Siswa</strong> di sidebar kiri.</li>
       <li>Klik tombol <strong>Impor Data Dapodik (Excel)</strong>.</li>
-      <li>Pilih file Excel dari Dapodik. Sistem akan otomatis mendeteksi kolom NISN, Nama, dan Jenis Kelamin, serta menyediakan pilihan filter Rombel/Kelas.</li>
+      <li>Pilih file Excel yang diunduh dari Dapodik atau rekap sekolah. Sistem secara cerdas akan mendeteksi baris judul, kolom NISN, Nama Siswa, Jenis Kelamin (L/P), dan Rombel Saat Ini.</li>
+      <li>Pilih kelas yang relevan dari menu dropdown filter rombel, lalu klik <strong>Mulai Impor</strong>.</li>
     </ol>
     <h3>B. Menambah Secara Manual</h3>
     <ol>
-      <li>Ketikkan NISN, Nama Lengkap, dan pilih Jenis Kelamin (L/P), lalu klik <strong>Simpan</strong>.</li>
-      <li>Tersedia fitur edit dan hapus per siswa dengan konfirmasi modal yang aman.</li>
+      <li>Ketikkan NISN, Nama Lengkap, dan pilih Jenis Kelamin (L/P) pada formulir di sebelah kiri, lalu klik <strong>Simpan</strong>.</li>
+      <li>Tersedia tombol <strong>Edit</strong> dan <strong>Hapus</strong> per siswa yang dilindungi konfirmasi dialog in-app yang aman.</li>
+      <li>Tersedia pula tombol <strong>Reset Siswa</strong> untuk mengosongkan seluruh data siswa sekaligus jika Anda ingin memulai tahun ajaran baru.</li>
     </ol>
 
     <h2>5. Mengelola Mata Pelajaran</h2>
     <ol>
-      <li>Buka menu <strong>Mata Pelajaran</strong>.</li>
-      <li><strong>Generate Standar:</strong> Pilih Kurikulum (Merdeka atau K13) dan Jenjang (SD, SMP, SMA, SMK), klik Tampilkan, lalu pilih mapel yang ingin ditambahkan secara otomatis.</li>
-      <li><strong>Manual:</strong> Ketik nama mata pelajaran dan pilih kategorinya (<strong>Wajib</strong> atau <strong>Muatan Lokal</strong>), lalu klik Tambah.</li>
+      <li>Buka menu <strong>Mata Pelajaran</strong> di sidebar kiri.</li>
+      <li><strong>Preset Kurikulum Otomatis:</strong> Pilih Kurikulum (<strong>Kurikulum Merdeka</strong> atau <strong>K13</strong>) dan Jenjang (<strong>SD, SMP, SMA, SMK</strong>), klik <strong>Tampilkan</strong>, lalu pilih mata pelajaran standar nasional yang ingin dimasukkan sekaligus.</li>
+      <li><strong>Penambahan Manual:</strong> Ketikkan nama mata pelajaran secara manual dan tentukan kategorinya:
+        <ul>
+          <li><strong>A. Mata Pelajaran Wajib:</strong> Kelompok mata pelajaran inti kurikulum nasional.</li>
+          <li><strong>B. Muatan Lokal:</strong> Kelompok mata pelajaran kedaerahan (seperti Bahasa Jawa, Bahasa Sunda, PLHJ, dsb).</li>
+        </ul>
+      </li>
+      <li>Mata pelajaran yang telah ditambahkan dapat diubah namanya, disesuaikan kategorinya, maupun dihapus sewaktu-waktu.</li>
     </ol>
 
-    <h2>6. Input Nilai & Fitur Tidak Remedi</h2>
+    <h2>6. Input Nilai & Fitur "Tidak Remedi"</h2>
     <ol>
-      <li>Masuk ke menu <strong>Input Nilai</strong>.</li>
-      <li>Pilih mata pelajaran yang ingin diinput dari menu dropdown di bagian atas.</li>
-      <li><strong>Input Nilai 0 (Nol):</strong> Angka 0 diakui sebagai nilai sah dan tidak akan terhapus.</li>
-      <li><strong>Tombol "Tidak Remedi":</strong> Jika siswa di kelas Anda tidak mengikuti remedial atau nilainya tuntas, klik tombol <strong>Tidak Remedi (Samakan Nilai)</strong>. Aplikasi akan otomatis mengisi kolom Nilai Remidi sama persis dengan Nilai Asli untuk seluruh siswa!</li>
-      <li><strong>Template Excel:</strong> Anda juga dapat mengklik <strong>Download Template Excel</strong>, membagikannya ke guru mapel, lalu mengimpornya kembali melalui tombol <strong>Import Excel</strong>.</li>
-      <li>Klik tombol <strong>Simpan Nilai</strong> di bawah tabel.</li>
+      <li>Masuk ke menu <strong>Input Nilai</strong> di sidebar kiri.</li>
+      <li>Pilih mata pelajaran yang ingin diisi nilainya dari menu dropdown di bagian atas.</li>
+      <li><strong>Input Langsung di Tabel:</strong> Ketikkan <strong>Nilai Asli</strong> dan <strong>Nilai Remidi</strong> (skala 0–100) langsung pada tabel siswa.</li>
+      <li><strong>Dukungan Penuh Nilai 0 (Nol):</strong> Angka <code>0</code> diakui secara sah sebagai nilai numerik valid dan tidak akan hilang atau berubah menjadi strip. Kosongkan kolom jika siswa memang belum dinilai.</li>
+      <li><strong>Tombol Pintas "Tidak Remedi":</strong> Apabila seluruh siswa di kelas Anda tuntas atau tidak mengikuti program remedial, klik tombol <strong>Tidak Remedi (Samakan Nilai)</strong>. Sistem akan langsung menyalin seluruh Nilai Asli ke kolom Nilai Remidi secara otomatis!</li>
+      <li><strong>Bekerja Offline via Excel:</strong> Anda dapat mengklik <strong>Download Template Excel</strong> untuk membagikan blangko penilaian kepada guru mapel, lalu mengunggahnya kembali ke aplikasi melalui tombol <strong>Import Excel</strong>.</li>
+      <li>Klik tombol <strong>Simpan Nilai</strong> di bawah tabel untuk menyimpan ke database.</li>
     </ol>
 
     <h2>7. Kehadiran & Catatan Siswa</h2>
     <ol>
-      <li>Buka menu <strong>Kehadiran</strong>.</li>
-      <li>Masukkan jumlah ketidakhadiran: <strong>Sakit (S)</strong>, <strong>Izin (I)</strong>, dan <strong>Tanpa Keterangan (A)</strong>.</li>
-      <li>Ketikkan evaluasi atau motivasi pada kolom <strong>Catatan Wali Kelas</strong>.</li>
-      <li>Klik tombol <strong>Simpan Kehadiran</strong> di kanan atas.</li>
+      <li>Buka menu <strong>Kehadiran</strong> di sidebar kiri.</li>
+      <li>Masukkan akumulasi ketidakhadiran tengah semester untuk masing-masing siswa:
+        <ul>
+          <li><strong>S:</strong> Sakit (dengan surat keterangan)</li>
+          <li><strong>I:</strong> Izin (dengan pemberitahuan orang tua)</li>
+          <li><strong>A:</strong> Tanpa Keterangan / Alpha</li>
+        </ul>
+      </li>
+      <li>Ketikkan motivasi belajar, pesan perkembangan kepribadian, atau catatan akademik pada kolom <strong>Catatan Wali Kelas</strong>.</li>
+      <li>Klik tombol <strong>Simpan Kehadiran</strong> di bagian kanan atas layar.</li>
     </ol>
 
-    <h2>8. Leger Nilai & Ranking Kelas (Fitur Baru)</h2>
+    <h2>8. Leger Nilai & Ranking Kelas</h2>
     <ol>
       <li>Buka menu <strong>Leger Nilai</strong> di sidebar kiri.</li>
-      <li>Aplikasi secara otomatis menghitung nilai akhir setiap mata pelajaran, <strong>Total Nilai</strong>, <strong>Rata-Rata Nilai</strong>, dan <strong>Peringkat (Ranking)</strong> kelas.</li>
-      <li>Tiga siswa peringkat teratas akan ditandai dengan lencana khusus: 🥇 Peringkat 1, 🥈 Peringkat 2, dan 🥉 Peringkat 3.</li>
-      <li>Klik tombol <strong>Export Leger ke Excel</strong> untuk menyimpan rekapitulasi nilai seluruh kelas ke dalam file Excel (.xlsx).</li>
+      <li>Sistem secara otomatis menghitung matriks nilai seluruh siswa dari semua mata pelajaran:
+        <ul>
+          <li><strong>Nilai Akhir:</strong> Ditentukan dari Nilai Remidi (jika ada) atau Nilai Asli.</li>
+          <li><strong>Total Nilai:</strong> Jumlah akumulatif seluruh nilai akhir mata pelajaran.</li>
+          <li><strong>Rata-Rata Nilai:</strong> Nilai rata-rata perolehan siswa.</li>
+          <li><strong>Peringkat (Ranking):</strong> Pemeringkatan otomatis berdasarkan Total Nilai tertinggi.</li>
+        </ul>
+      </li>
+      <li>Tiga siswa peringkat teratas akan dianugerahi lencana penghargaan: 🥇 Juara 1, 🥈 Juara 2, dan 🥉 Juara 3.</li>
+      <li>Klik tombol <strong>Export Leger ke Excel</strong> untuk mengunduh rekap nilai lengkap satu rombel berformat <code>.xlsx</code> yang siap dicetak atau dilaporkan ke pihak kurikulum/kepala sekolah.</li>
     </ol>
 
     <h2>9. Mencetak Rapor (Satuan & Masal)</h2>
+    <p>
+      Format cetak rapor e-RTS v1.1.0 telah disempurnakan secara presisi (<em>pixel-perfect</em>) agar tepat memenuhi <strong>1 halaman penuh kertas A4</strong> standar arsip dinas resmi:
+    </p>
+
+    <table class="spec-table">
+      <thead>
+        <tr>
+          <th>Spesifikasi Cetak</th>
+          <th>Ukuran / Standar</th>
+          <th>Keterangan</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Ukuran Kertas</strong></td>
+          <td>A4 Portrait (210 × 297 mm)</td>
+          <td>Pas 1 halaman penuh (tanpa overflow ke halaman 2)</td>
+        </tr>
+        <tr>
+          <td><strong>Margin Halaman</strong></td>
+          <td>Atas: 1.2 cm | Bawah: 1.25 cm<br>Kiri: 1.85 cm | Kanan: 1.85 cm</td>
+          <td>Standar Jilid Map & Arsip (memberi ruang jepit map)</td>
+        </tr>
+        <tr>
+          <td><strong>Rasio Skala Render</strong></td>
+          <td>100% Murni (No-Downscale)</td>
+          <td>Konten melebar penuh 17.3 cm, garis tajam dan proporsional</td>
+        </tr>
+        <tr>
+          <td><strong>Peringkat Kelas</strong></td>
+          <td>1 Baris Lurus Mendatar</td>
+          <td><code>Peringkat ke-X dari Y Siswa</code> (berwarna biru rapi)</td>
+        </tr>
+        <tr>
+          <td><strong>Susunan Tanda Tangan</strong></td>
+          <td>2 Tingkat Simetris</td>
+          <td>Atas: Orang Tua & Wali Kelas | Bawah: Kepala Sekolah & Stempel</td>
+        </tr>
+      </tbody>
+    </table>
+
     <ol>
-      <li>Buka menu <strong>Cetak Rapor</strong>.</li>
-      <li><strong>Total & Peringkat di Rapor:</strong> Lembar rapor secara otomatis mencantumkan baris Jumlah Nilai, Rata-Rata, dan Peringkat Kelas siswa.</li>
-      <li><strong>Preview & Cetak Satuan:</strong> Pilih siswa dari dropdown, klik <strong>Preview Rapor</strong>, lalu klik <strong>Cetak Siswa Ini</strong>.</li>
-      <li><strong>Cetak Masal Seluruh Kelas:</strong> Klik tombol <strong>Cetak Semua Siswa</strong>. Aplikasi akan menyusun lembar rapor seluruh kelas dengan pemisah halaman otomatis (<em>page-break</em>) siap cetak sekaligus.</li>
+      <li>Buka menu <strong>Cetak Rapor</strong> di sidebar kiri.</li>
+      <li><strong>Kontrol Peringkat Langsung:</strong> Centang atau hilangkan centang <em>"Tampilkan Peringkat Kelas"</em> di bagian atas untuk mengatur kemunculan baris ranking pada lembar rapor saat itu juga.</li>
+      <li><strong>Cetak Satuan (Per Siswa):</strong> Pilih nama siswa dari menu dropdown, klik <strong>Preview Rapor</strong>, lalu klik tombol <strong>Cetak Siswa Ini</strong>.</li>
+      <li><strong>Cetak Masal Seluruh Kelas (Batch Printing):</strong> Klik tombol <strong>Cetak Semua Siswa</strong>. Aplikasi akan menyusun lembar rapor seluruh siswa dalam kelas dengan pembatas halaman otomatis (<em>auto page-break</em>). Anda cukup memilih printer fisik atau opsi <em>"Save as PDF"</em> pada jendela print Windows.</li>
     </ol>
 
     <h2>10. Cadangkan & Pulihkan Data (Backup & Restore)</h2>
     <ol>
-      <li>Buka menu <strong>Pengaturan</strong> lalu klik tab <strong>3. Backup & Restore</strong>.</li>
-      <li><strong>Cadangkan Data (Backup):</strong> Klik tombol <em>Simpan Cadangan Database</em> untuk menyimpan salinan database (.sqlite) ke flashdisk atau folder cadangan Anda.</li>
-      <li><strong>Pulihkan Data (Restore):</strong> Jika Anda berpindah laptop atau ingin mengembalikan data lama, klik tombol <em>Pilih File untuk Dipulihkan</em> dan pilih file cadangan Anda.</li>
+      <li>Buka menu <strong>Pengaturan</strong>, lalu klik tab <strong>3. Backup & Restore</strong>.</li>
+      <li><strong>Cadangkan Data (Backup):</strong> Klik tombol <em>Simpan Cadangan Database</em>. Pilih folder penyimpanan aman (misalnya Flashdisk, Harddisk Eksternal, atau Cloud Drive). Berkas cadangan akan disimpan dengan penamaan otomatis bertanggal (misal: <code>Backup_eRTS_2026-10-20.sqlite</code>).</li>
+      <li><strong>Pulihkan Data (Restore):</strong> Jika Anda mengganti komputer, menginstal ulang Windows, atau ingin mengembalikan data ke titik sebelumnya, klik tombol <em>Pilih File untuk Dipulihkan</em> dan pilih berkas <code>.sqlite</code> cadangan Anda. Seluruh data sekolah, siswa, nilai, dan tanda tangan akan kembali seketika.</li>
     </ol>
 
+    <h2>11. Catatan Riwayat Perubahan (Changelog)</h2>
+
+    <div class="changelog-card">
+      <div class="changelog-header">
+        <div>
+          <strong style="font-size:12pt; color:#1e3a8a;">Versi 1.1.0</strong>
+          <span style="font-size:9pt; color:#64748b; margin-left:8px;">(Rilis: 20 Oktober 2026)</span>
+        </div>
+        <span class="meta-badge">RILIS TERBARU</span>
+      </div>
+
+      <p style="margin:4px 0 10px 0; font-weight:600; font-size:10pt; color:#0f172a;">
+        🌟 Sorotan Pembaruan: Peningkatan Stabilitas Anti-Freeze, Leger Nilai & Ranking Kelas, Backup/Restore, dan Cetak Rapor Pixel-Perfect A4.
+      </p>
+
+      <ul>
+        <li>
+          <span class="badge-tag badge-ui">Stabilitas</span>
+          <strong>Sistem Notifikasi & Dialog Anti-Freeze:</strong> Menghapus seluruh fungsi <code>alert()</code> dan <code>confirm()</code> bawaan Windows yang menyebabkan form dan keyboard terkunci (freeze). Menggantinya dengan <em>Floating In-App Toast</em> dan <em>Custom Promise Modal Dialog</em> yang mulus dan non-blocking.
+        </li>
+        <li>
+          <span class="badge-tag badge-fix">Perbaikan</span>
+          <strong>Pemulihan Fokus Jendela File Dialog:</strong> Memperbaiki seluruh dialog file Electron (unggah logo, stempel, template excel, backup) agar jendela utama otomatis mendapatkan kembali fokus keyboard setelah dialog ditutup.
+        </li>
+        <li>
+          <span class="badge-tag badge-fix">Perbaikan</span>
+          <strong>Dukungan Penuh Nilai 0 (Nol):</strong> Memperbaiki logika evaluasi nilai sehingga angka <code>0</code> diakui sebagai nilai sah pada input tabel, ekspor/impor Excel, perhitungan leger, dan lembar cetak rapor.
+        </li>
+        <li>
+          <span class="badge-tag badge-feat">Fitur Baru</span>
+          <strong>Modul Leger Nilai & Ranking Kelas:</strong> Menambahkan menu navigasi baru untuk melihat matriks nilai seluruh siswa dan seluruh mata pelajaran dalam satu layar, lengkap dengan perhitungan otomatis total nilai, rata-rata, peringkat kelas dengan lencana medali (🥇, 🥈, 🥉), serta tombol ekspor leger ke format Excel (.xlsx).
+        </li>
+        <li>
+          <span class="badge-tag badge-feat">Fitur Baru</span>
+          <strong>Tombol Pintas "Tidak Remedi":</strong> Tombol satu klik di menu input nilai untuk menyalin seluruh Nilai Asli ke Nilai Remidi bagi kelas yang siswanya tuntas tanpa mengikuti remedial.
+        </li>
+        <li>
+          <span class="badge-tag badge-feat">Fitur Baru</span>
+          <strong>Setup Guard & Alur Terarah:</strong> Mengunci menu navigasi secara visual sebelum data sekolah dilengkapi, dan otomatis mengarahkan pengguna langsung ke Dashboard setelah pengaturan awal disimpan.
+        </li>
+        <li>
+          <span class="badge-tag badge-feat">Fitur Baru</span>
+          <strong>Fitur Backup & Restore Database:</strong> Fasilitas pencadangan dan pemulihan snapshot database SQLite lokal melalui tab Pengaturan.
+        </li>
+        <li>
+          <span class="badge-tag badge-feat">Fitur Baru</span>
+          <strong>Indikator Kelengkapan Mapel di Dashboard:</strong> Kartu hijau di dashboard yang merangkum mata pelajaran mana saja yang pengisian nilainya telah mencapai 100% tuntas.
+        </li>
+        <li>
+          <span class="badge-tag badge-print">Tata Letak</span>
+          <strong>Format Cetak Rapor A4 Standar Arsip (Single Page Fit):</strong>
+          <ul>
+            <li>Desain pas <strong>1 halaman penuh A4 (210 × 297 mm)</strong> tanpa kelebihan halaman kedua.</li>
+            <li>Margin presisi Jilid Map/Arsip: Atas 1.2 cm, Bawah 1.25 cm, Kiri 1.85 cm, Kanan 1.85 cm.</li>
+            <li>Rendering skala murni 100% tanpa distorsi kompresi atau auto-downscale browser.</li>
+            <li>Teks peringkat kelas tampil lurus dalam 1 baris utuh (<code>whitespace-nowrap</code>).</li>
+            <li>Susunan tanda tangan 2 tingkat yang proporsional dengan stempel otentik menimpa garis nama di dasar halaman.</li>
+            <li>Kontrol visibilitas baris peringkat kelas (dapat dinyalakan/dimatikan di Pengaturan maupun saat Preview Cetak).</li>
+          </ul>
+        </li>
+        <li>
+          <span class="badge-tag badge-ui">Dukungan</span>
+          <strong>Integrasi Trakteer Sukarela:</strong> Popup apresiasi berkala dan tautan langsung untuk mendukung kelanjutan pengembangan aplikasi mandiri melalui <code>teer.id/nur_wahid_musthofa</code>.
+        </li>
+      </ul>
+    </div>
+
+    <div class="changelog-card" style="background:#fafafa;">
+      <div class="changelog-header">
+        <div>
+          <strong style="font-size:11pt; color:#475569;">Versi 1.0.0</strong>
+          <span style="font-size:9pt; color:#94a3b8; margin-left:8px;">(Rilis Perdana: 8 Oktober 2026)</span>
+        </div>
+        <span class="meta-badge" style="background:#f1f5f9; color:#64748b; border-color:#cbd5e1;">RILIS AWAL</span>
+      </div>
+      <ul>
+        <li>Rilis publik perdana aplikasi e-RTS desktop berbasis Electron dan SQLite.</li>
+        <li>Manajemen identitas sekolah, kelas, dan data siswa.</li>
+        <li>Manajemen mata pelajaran dengan preset Kurikulum Merdeka dan Kurikulum 2013 (SD, SMP, SMA, SMK).</li>
+        <li>Fitur input nilai asli dan nilai remidi siswa.</li>
+        <li>Fitur pencatatan ketidakhadiran (S/I/A) dan kolom catatan wali kelas.</li>
+        <li>Format cetak lembar hasil belajar tengah semester dengan logo dan tanda tangan digital.</li>
+        <li>Dukungan impor data siswa dan nilai dari template spreadsheet Microsoft Excel.</li>
+      </ul>
+    </div>
+
+    <h2>12. Bantuan & Dukungan Developer</h2>
+    <p>
+      Jika Anda menemukan kendala teknis, memiliki saran pengembangan, atau ingin mengundang diskusi seputar digitalisasi administrasi kelas:
+    </p>
+    <ul>
+      <li><strong>Pengembang:</strong> Nur Wahid Mustofa (SIGIE Lab)</li>
+      <li><strong>Surel (Email):</strong> <code>nurwahid0700@gmail.com</code></li>
+      <li><strong>Repositori Resmi GitHub:</strong> <a href="https://github.com/nwmustofa/e-rts" target="_blank" style="color:#2563eb; font-weight:600;">github.com/nwmustofa/e-rts</a></li>
+      <li><strong>Dukungan Sukarela (Trakteer):</strong> <a href="https://teer.id/nur_wahid_musthofa" target="_blank" style="color:#dc2626; font-weight:600;">teer.id/nur_wahid_musthofa</a></li>
+    </ul>
+
     <div class="footer-note">
-      Dokumen Resmi e-RTS v1.1.0.<br>
-      © 2026 SIGIE Lab by Nur Wahid Mustofa. Seluruh hak cipta dilindungi.
+      Buku Panduan Resmi e-RTS v1.1.0.<br>
+      © 2026 SIGIE Lab by Nur Wahid Mustofa. Seluruh hak cipta dilindungi undang-undang.
     </div>
   </div>
 
